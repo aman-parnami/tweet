@@ -1,0 +1,190 @@
+<html>
+    <style>
+        .colorGray{color: #8A8887;}
+        .colorRed{color: red;}
+        .isHide{display: none;}
+    </style>
+    <script>
+        $(document).on('click', '#modalContent', function () {
+            $('#newComment').html('');
+        });
+    </script>
+    
+  <body style="background-color:#eaf0f2">
+    <div class="container">
+      <div class="row">
+
+      <!-- left sidebar menu  START-->
+
+        <div class="hidden-xs col-md-3 col-centered" ng-controller="loginUserDetails">
+          <div class="item">
+            <div class="content">
+              <div style="position: fixed;top: 7%;width: 21%;z-index: 999;" class="card hovercard">
+                <div class="cardheader"></div>
+                <div class="avatar"><img alt="" src="images/{{userInfo.profile_pic}}"/></div>
+                <div class="info">
+                  <div class="title"><a target="_blank" href="#">{{userInfo.full_name}}</a></div>
+                  <div class="desc">{{userInfo.email}}</div>
+                  <div class="desc">Backend developer</div>
+                  <div class="desc">Tech geek</div>
+                </div>            
+
+                   <div class="twPc-divStats">
+                    <ul class="twPc-Arrange">
+                      <li class="twPc-ArrangeSizeFit">
+                        <a href="#/posts" title="{{posts}} Tweet">
+                          <span class="twPc-StatLabel twPc-block">Posts</span>
+                          <span class="twPc-StatValue">{{posts}}</span>
+                        </a>
+                      </li>
+                      <li class="twPc-ArrangeSizeFit">
+                        <a href="#/followings" title="{{following}} Following">
+                          <span class="twPc-StatLabel twPc-block">Following</span>
+                          <span class="twPc-StatValue">{{following}}</span>
+                        </a>
+                      </li>
+                      <li class="twPc-ArrangeSizeFit">
+                        <a href="#/followers" title="{{followers}} Followers">
+                          <span class="twPc-StatLabel twPc-block">Followers</span>
+                          <span class="twPc-StatValue">{{followers}}</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- left sidebar menu END -->
+
+        <!-- Middle post content page  start-->
+
+        <div style="padding-top:5%;padding-right:10px;" class="col-md-6 col-centered">
+          <div id="boxshadow" style="border:1px solid #cecece; border-radius:3px;" class="item">
+            <div class="content">
+
+                <div ng-view>
+                  
+                </div>
+            
+
+            </div>
+
+            
+          </div>
+        </div>
+
+        <!-- Middle post bar END -->
+
+
+        <!-- Right SIdebar Content STAET -->
+
+
+        <div class="hidden-xs col-md-3 col-centered" ng-controller="suggestionCtrl">
+          <div class="item">
+            <div class="content">
+              <div style="position: fixed;top: 7%;width: 21%;  background-color: #FFFFFF; z-index: 999;" class="card hovercard">
+
+                  <h4 style="text-align:left;padding:10px;color:#9B9999;">Suggestions</h4>
+
+                  <div style="padding:10px;" ng-hide="follow[$index]" ng-repeat="suggest in userSuggestions | limitTo:3">                  
+                    <p style="display:inline;float:left;">
+                      <a title="Facebook" href="">
+                          <img style="border-radius:50%; height:40px; width:40px; " alt="" src="images/{{suggest.profile_pic}}"/>
+                      </a> 
+                    </p>
+                      <div style="float:left">
+                          <span style="font-size:1.3em;">&nbsp;<a href="">{{suggest.full_name}}</a></span> 
+                      </div>
+                      <div style="float:right">
+                          <span style="display: -moz-groupbox;">
+                              <button ng-click="follow(suggest.user_id,$index)" class="btn btn-default"><i class="fa fa-plus"></i>&nbsp;follow</button>
+                          </span> 
+                      </div>                                       
+                    <hr style="margin:-5px;">
+                </div>
+                <a href="#suggestions">see all suggestions</a>
+                             
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Right sidebar Content END -->
+
+
+
+
+      </div>
+    </div>
+
+     <!-- Comment  Modal -->
+     
+     <!-- Modal -->
+<div class="modal fade" id="myCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title"><i class="fa fa-comment"></i> Comment</h4>
+      </div>
+      <div class="modal-body" ng-controller="commentCtrl">
+        <p style="display:inline;float:left;">
+            <a title="Facebook" href="">
+                <img style="border-radius:50%; height:40px; width:40px; " alt="" src="images/my.jpg"/>
+            </a> 
+            <div style="float:left">
+                <span style="font-size:1.3em;">&nbsp;<a href="">{{postDetail.user_name}}</a></span> 
+            </div>
+             <div style="float:right">
+                <span style="display: -moz-groupbox;">
+                    <button class="btn btn-primary"><i class="fa fa-cog"></i>&nbsp;follow</button>
+                </span> 
+            </div>
+          
+        </p>
+        <br>    
+        <br>
+        <p style="display: -moz-groupbox; text-align: justify;">{{postDetail.post_text}}</p>                
+        <form ng-submit="doComment(postDetail.id)">
+            <div class="input-group col-md-12">
+              <input type="text" ng-model="formData.commentData" placeholder="post your comment!" class="form-control" style="border-radius:5px;" />
+            </div>                      
+        </form>
+        <hr>              
+            <ul style="background-color: #F6F7F9;border-radius: 5px;padding: 10px;list-style-type:none">
+
+                <div id="newComment" ng-show="showCommentDiv">
+                    <strong class="pull-left primary-font">{{newComment.full_name}}</strong>
+                    <small class="pull-right text-muted">
+                       <span class="glyphicon glyphicon-time"></span>{{newComment.comment_at}}</small>
+                    <br>
+                    <li class="ui-state-default">{{newComment.comment_text}}</li>
+                    <hr>
+                </div>
+                <div ng-if="commentDetail.length > 0" ng-repeat="comment in commentDetail">
+                    <strong class="pull-left primary-font">{{comment.full_name}}</strong>
+                    <small class="pull-right text-muted">
+                       <span class="glyphicon glyphicon-time"></span>{{comment.comment_at}}</small>
+                    <br>
+                    <li class="ui-state-default">{{comment.comment_text}}</li>
+                    <hr>
+                </div>
+                <div ng-if="commentDetail.length == 0" ng-hide="noCommentDiv">
+                    <p>No comments!</p>
+                </div>
+                       
+            </ul>
+        
+      </div>
+     
+    </div>
+  </div>
+    
+
+      <!-- Comment  Modal END-->
+  </body>
+</html>
